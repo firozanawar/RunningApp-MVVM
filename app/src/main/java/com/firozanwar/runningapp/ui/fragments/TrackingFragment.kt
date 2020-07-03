@@ -1,10 +1,13 @@
 package com.firozanwar.runningapp.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.firozanwar.runningapp.R
+import com.firozanwar.runningapp.other.Constants
+import com.firozanwar.runningapp.services.TrackingService
 import com.firozanwar.runningapp.ui.viewmodels.MainViewModel
 import com.google.android.gms.maps.GoogleMap
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +27,17 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
         mapView.getMapAsync {
             map = it
+        }
+
+        btnToggleRun.setOnClickListener {
+            sendCommand(Constants.ACTION_START_OR_RESUME_SERVICE)
+        }
+    }
+
+    fun sendCommand(action: String) {
+        Intent(requireContext(), TrackingService::class.java).also {
+            it.action = action
+            requireContext().startService(it)
         }
     }
 
